@@ -11,15 +11,14 @@ import (
 
 	"ds2api/internal/auth"
 	"ds2api/internal/config"
-	"github.com/google/uuid"
 )
 
 func (c *Client) Login(ctx context.Context, acc config.Account) (string, error) {
 	clients := c.requestClientsForAccount(acc)
 	payload := map[string]any{
 		"password":  strings.TrimSpace(acc.Password),
-		"device_id": deviceIDForAccount(acc),
-		"os":        "web",
+		"device_id": "deepseek_to_api",
+		"os":        "android",
 	}
 	if email := strings.TrimSpace(acc.Email); email != "" {
 		payload["email"] = email
@@ -30,7 +29,7 @@ func (c *Client) Login(ctx context.Context, acc config.Account) (string, error) 
 	} else {
 		return "", errors.New("missing email/mobile")
 	}
-	resp, err := c.postJSON(ctx, clients.regular, clients.fallback, dsprotocol.DeepSeekLoginURL, dsprotocol.BaseHeaders, payload)
+	resp, err := c.postJSON(ctx, clients.regular, clients.fallback, dsprotocol.DeepSeekLoginURL, androidLoginHeaders(), payload)
 	if err != nil {
 		return "", err
 	}
@@ -168,18 +167,17 @@ func (c *Client) authHeaders(token string) map[string]string {
 	return headers
 }
 
-func deviceIDForAccount(acc config.Account) string {
-	seed := strings.ToLower(strings.TrimSpace(acc.Email))
-	if seed == "" {
-		seed = strings.TrimSpace(acc.Mobile)
+func androidLoginHeaders() map[string]string {
+	return map[string]string{
+		"Host":              "chat.deepseek.com",
+		"Accept":            "application/json",
+		"Content-Type":      "application/json",
+		"accept-charset":    "UTF-8",
+		"User-Agent":        "DeepSeek/2.0.4 Android/35",
+		"x-client-platform": "android",
+		"x-client-version":  "2.0.4",
+		"x-client-locale":   "zh_CN",
 	}
-	if seed == "" {
-		seed = strings.TrimSpace(acc.Token)
-	}
-	if seed == "" {
-		return uuid.NewString()
-	}
-	return uuid.NewSHA1(uuid.NameSpaceURL, []byte("ds2api:web:"+seed)).String()
 }
 
 func isTokenInvalid(status int, code int, bizCode int, msg string, bizMsg string) bool {
