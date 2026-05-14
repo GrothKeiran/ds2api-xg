@@ -1,0 +1,39 @@
+{
+  "client": {
+    "name": "DeepSeek",
+    "platform": "web",
+    "version": "1.8.0",
+    "android_api_level": "",
+    "locale": "zh_CN"
+  },
+  "base_headers": {
+    "Host": "chat.deepseek.com",
+    "Accept": "*/*",
+    "Content-Type": "application/json",
+    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "sec-ch-ua": "\"Chromium\";v=\"130\", \"Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"130\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "Origin": "https://chat.deepseek.com",
+    "Referer": "https://chat.deepseek.com/",
+    "x-app-version": "20241129.1",
+    "x-client-timezone-offset": "28800"
+  },
+  "skip_contains_patterns": [
+    "quasi_status",
+    "elapsed_secs",
+    "pending_fragment",
+    "conversation_mode",
+    "fragments/-1/status",
+    "fragments/-2/status",
+    "fragments/-3/status"
+  ],
+  "skip_exact_paths": [
+    "response/search_status"
+  ]
+}
