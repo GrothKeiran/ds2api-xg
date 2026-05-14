@@ -52,7 +52,9 @@ function buildBaseHeaders(parsed, client) {
     ? parsed.base_headers
     : {};
   const baseHeaders = { ...DEFAULT_BASE_HEADERS, ...rawBaseHeaders };
-  if (client.name && client.version) {
+  if (client.platform === 'web') {
+    baseHeaders['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
+  } else if (client.name && client.version) {
     const androidSuffix = client.platform === 'android' && client.androidApiLevel
       ? ` Android/${client.androidApiLevel}`
       : '';
